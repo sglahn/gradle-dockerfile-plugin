@@ -1,0 +1,94 @@
+apply plugin: 'groovy'
+
+group = 'org.sglahn'
+version = "0.2"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+
+    testCompile 'org.codehaus.groovy:groovy-all:2.4.4'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+}
+
+task sourcesJar(type: Jar) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+    classifier 'groovydoc'
+    from groovydoc.destinationDir
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives groovydocJar
+    archives javadocJar
+}
+
+apply plugin: 'maven'
+
+install {
+    repositories.mavenInstaller {
+        pom.version = project.version
+        pom.groupId = group
+        pom.artifactId = rootProject.name
+        pom.packaging = 'jar'
+    }
+}
+install.dependsOn('build')
+
+apply plugin: 'signing'
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+
+            pom.project {
+                name rootProject.name
+                packaging 'jar'
+                description = 'Gradle Plugin to build and push Docker images.'
+                url 'https://github.com/sglahn/gradle-dockerfile-plugin'
+
+                scm {
+                    url 'scm:git@github.com:sglahn/gradle-dockerfile-plugin.git'
+                    connection 'scm:git@github.com:sglahn/gradle-dockerfile-plugin.git'
+                    developerConnection 'scm:git@github.com:sglahn/gradle-dockerfile-plugin.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'sglahn'
+                        name 'Sebastian Glahn'
+                    }
+                }
+            }
+        }
+    }
+}
