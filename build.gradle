@@ -1,16 +1,48 @@
 apply plugin: 'groovy'
 
 group = 'org.sglahn'
-version = "0.2"
+version = "0.3"
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+    }
+}
+
+apply plugin: "com.gradle.plugin-publish"
+
+pluginBundle {
+    website = 'https://github.com/sglahn/gradle-dockerfile-plugin'
+    vcsUrl = 'https://github.com/sglahn/gradle-dockerfile-plugin'
+    description = 'Gradle Plugin to build and push Docker images without inline configuration.'
+    tags = ['Docker', 'Dockerfile']
+
+    plugins {
+        DockerfilePlugin {
+            id = 'org.sglahn.gradle-dockerfile-plugin'
+            displayName = 'Gradle Dockerfile Plugin'
+        }
+    }
+}
 
 repositories {
     mavenCentral()
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.4.1'
+}
+
 dependencies {
     compile gradleApi()
+    compile 'org.codehaus.groovy:groovy-all:2.4.7'
 
-    testCompile 'org.codehaus.groovy:groovy-all:2.4.4'
+    testCompile gradleTestKit()
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
 }
 
@@ -65,7 +97,7 @@ uploadArchives {
             pom.project {
                 name rootProject.name
                 packaging 'jar'
-                description = 'Gradle Plugin to build and push Docker images.'
+                description = 'Gradle Plugin to build and push Docker images without inline configuration.'
                 url 'https://github.com/sglahn/gradle-dockerfile-plugin'
 
                 scm {

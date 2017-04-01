@@ -1,40 +1,43 @@
-package com.sglahn.gradle.docker
+package org.sglahn.gradle.docker
 
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.sglahn.gradle.docker.util.DockerHelper
 import spock.lang.Specification
 
 class DockerHelperSpec extends Specification{
 
+    def pluginName = 'dockerfile'
+
     def "Default Dockerfile is returned"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
+        project.apply plugin: pluginName
 
         when:
         def dockerfile = DockerHelper.dockerFile(project)
 
         then:
-        dockerfile.equals(new File(project.projectDir, "Dockerfile"))
+        dockerfile == (new File(project.projectDir, "Dockerfile"))
     }
 
     def "Specified Dockerfile is returned"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
-        project.docker.dockerFile = "src/main/docker/Dockerfile"
+        project.apply plugin: pluginName
+        project.getExtensions().docker.dockerFile = "src/main/docker/Dockerfile"
 
         when:
         def dockerfile = DockerHelper.dockerFile(project)
 
         then:
-        dockerfile.equals(new File(project.projectDir, "src/main/docker/Dockerfile"))
+        dockerfile == (new File(project.projectDir, "src/main/docker/Dockerfile"))
     }
 
     def "Default tag is applied if no tag specified"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
+        project.apply plugin: pluginName
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -46,8 +49,8 @@ class DockerHelperSpec extends Specification{
     def "Specified tags are applied"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
-        project.docker.tags = ["1.0", "version"]
+        project.apply plugin: pluginName
+        project.getExtensions().docker.tags = ["1.0", "version"]
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -60,8 +63,8 @@ class DockerHelperSpec extends Specification{
     def "Specified labels are applied"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
-        project.docker.labels = ["mylabel=test", "testlabel=foo"]
+        project.apply plugin: pluginName
+        project.getExtensions().docker.labels = ["mylabel=test", "testlabel=foo"]
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -74,8 +77,8 @@ class DockerHelperSpec extends Specification{
     def "Specified build arguments are applied"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
-        project.docker.labels = ["--build-arg=custom='test'"]
+        project.apply plugin: pluginName
+        project.getExtensions().docker.labels = ["--build-arg=custom='test'"]
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -87,7 +90,7 @@ class DockerHelperSpec extends Specification{
     def "Default remove intermediate containers is false"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
+        project.apply plugin: pluginName
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -99,8 +102,8 @@ class DockerHelperSpec extends Specification{
     def "Remove intermediate containers is flag is true"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
-        project.docker.removeIntermediateContainers = true
+        project.apply plugin: pluginName
+        project.getExtensions().docker.removeIntermediateContainers = true
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -112,7 +115,7 @@ class DockerHelperSpec extends Specification{
     def "Default Dockerfile is correct"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
+        project.apply plugin: pluginName
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -124,8 +127,8 @@ class DockerHelperSpec extends Specification{
     def "Specified Dockerfile is applied"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
-        project.docker.dockerFile = "src/main/docker/Dockerfile"
+        project.apply plugin: pluginName
+        project.getExtensions().docker.dockerFile = "src/main/docker/Dockerfile"
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -137,7 +140,7 @@ class DockerHelperSpec extends Specification{
     def "Default container isolation is default "() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
+        project.apply plugin: pluginName
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -149,8 +152,8 @@ class DockerHelperSpec extends Specification{
     def "Specified container isolation is applied"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
-        project.docker.isolation = "hyperv"
+        project.apply plugin: pluginName
+        project.getExtensions().docker.isolation = "hyperv"
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -162,7 +165,7 @@ class DockerHelperSpec extends Specification{
     def "Cache is disabled as default"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
+        project.apply plugin: pluginName
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -174,8 +177,8 @@ class DockerHelperSpec extends Specification{
     def "Cache can be activated"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
-        project.docker.noCache = true
+        project.apply plugin: pluginName
+        project.getExtensions().docker.noCache = true
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -187,7 +190,7 @@ class DockerHelperSpec extends Specification{
     def "Docker build is quiet as default"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
+        project.apply plugin: pluginName
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -199,8 +202,8 @@ class DockerHelperSpec extends Specification{
     def "Docker output can be activated"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
-        project.docker.quiet = false
+        project.apply plugin: pluginName
+        project.getExtensions().docker.quiet = false
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -212,7 +215,7 @@ class DockerHelperSpec extends Specification{
     def "Pull newer version of image is deactivated as default"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
+        project.apply plugin: pluginName
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
@@ -224,8 +227,8 @@ class DockerHelperSpec extends Specification{
     def "Pull newer version of image can be activated"() {
         given:
         Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
-        project.docker.quiet = false
+        project.apply plugin: pluginName
+        project.getExtensions().docker.quiet = false
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)
