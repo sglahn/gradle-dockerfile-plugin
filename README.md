@@ -9,24 +9,30 @@ To use the plugin add a build script dependency to your Gradle build file:
 ```gradle
 buildscript {
     repositories { mavenCentral() }
-    dependencies { classpath('org.sglahn:gradle-dockerfile-plugin:0.2') }
+    dependencies { classpath('org.sglahn:gradle-dockerfile-plugin:0.3') }
 }
 apply plugin: 'dockerfile'
+```
+or via the new plugin mechanism introduced in Gradle 2.1:
+```
+plugins {
+  id "org.sglahn.gradle-dockerfile-plugin" version "0.3"
+}
 ```
 The plugin will add the following tasks to your project:
 ```sh
 $ ./gradlew tasks
 Docker tasks
 ------------
-docker -  Builds a new image with a Dockerfile.
+dockerBuild - Builds a new image with a Dockerfile.
 dockerPush - Pushes a docker image to a repository.
 ```
-### The docker task
-The `docker` task will build a new Docker image. The default settings are:
+### The dockerBuild task
+The `dockerBuild` task will build a new Docker image. The default settings are:
 
- - Dockerfile: `${projectDir}/Dockerfile`.
- - image name: `project.name`
- - tag: `project.version` and `latest`.
+ - dockerfile: `${projectDir}/Dockerfile`.
+ - imageName: `project.name`
+ - tags: `project.version` and `latest`.
 
 For more information see `Configuration` section.
 ### The dockerPush task

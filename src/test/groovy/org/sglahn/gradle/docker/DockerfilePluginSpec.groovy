@@ -1,5 +1,6 @@
-package com.sglahn.gradle.docker
+package org.sglahn.gradle.docker
 
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskExecutionException
 import org.gradle.testfixtures.ProjectBuilder
@@ -22,25 +23,24 @@ class DockerfilePluginSpec extends Specification {
         given:
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: 'dockerfile'
-        project.evaluate()
 
         expect:
-        project.tasks['docker'].group == "Docker"
-        project.tasks['docker'].description != ""
+        project.tasks['dockerBuild'].group == "Docker"
+        project.tasks['dockerBuild'].description != ""
     }
 
     def "Plugin task fails with Exception if Dockerfile not found"() {
         given:
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: 'dockerfile'
-        project.docker.dockerFile = "src/foo/Dockerfile"
+        project.getExtensions().docker.dockerFile = "src/foo/Dockerfile"
         project.evaluate()
 
         when:
-        project.tasks['docker'].execute()
+        project.tasks['dockerBuild'].execute()
 
         then:
-        TaskExecutionException exception = thrown()
+        GradleException exception = thrown()
         exception.getCause().getLocalizedMessage().contains("Dockerfile not found in ")
     }
 
@@ -51,10 +51,10 @@ class DockerfilePluginSpec extends Specification {
         project.evaluate()
 
         when:
-        project.tasks['docker'].execute()
+        project.tasks['dockerBuild'].execute()
 
         then:
-        TaskExecutionException exception = thrown()
+        GradleException exception = thrown()
         exception.getCause().getLocalizedMessage().contains("Dockerfile not found in ")
     }
 }

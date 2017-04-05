@@ -1,0 +1,58 @@
+buildscript {
+    repositories { mavenCentral() }
+    dependencies { classpath('org.sglahn:gradle-dockerfile-plugin:0.3') }
+}
+apply plugin: 'dockerfile'
+
+// or via plugin mechanism:
+//plugins {
+//    id "org.sglahn.gradle-dockerfile-plugin" version "0.3"
+//}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.4.1'
+}
+
+apply plugin: 'java'
+
+version = "1.0.0"
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.21'
+
+    testCompile 'junit:junit:4.12'
+}
+
+docker {
+    // Image version. Optional, default = project.version
+    imageVersion = version
+    // Image name. Optional, default = project.name
+    imageName = name
+    // Docker repository. Optional, default == no repository
+    dockerRepository = 'sglahn'
+    // Path to the Dockerfile to use. Optional, default = ${projectDir}/Dockerfile
+    dockerFile = 'src/main/docker/Dockerfile'
+    // Add a list of tags for an image. Optional, default = 'latest'
+    tags = [version, 'latest', 'Hello']
+    // Set metadata for an image. Optional, default = no label applied
+    labels = ['branch=master', 'mylabel=test']
+    // name and value of a buildarg. Optional, default = no build arguments
+    buildArgs = ['http_proxy="http://some.proxy.url"']
+    // Always remove intermediate containers, even after unsuccessful builds. Optional, default = false
+    removeIntermediateContainers = true
+    // Isolation specifies the type of isolation technology used by containers. Optional, default = default
+    isolation = 'default'
+    // Do not use cache when building the image. Optional, default = false
+    noCache = true
+    // Always attempt to pull a newer version of the image. Optional, default false
+    pull = true
+    // Suppress the build output and print image ID on success. Optional, default = true
+    quiet = false
+}
+dockerBuild.dependsOn(build)
+dockerPush.dependsOn(dockerBuild)
+
