@@ -32,4 +32,5 @@ class DockerFilePluginExtension {
     boolean noCache = false
     boolean pull = false
     boolean quiet = true
+    boolean removeImagesAfterPush = false
 }

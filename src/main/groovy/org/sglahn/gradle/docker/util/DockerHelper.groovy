@@ -62,6 +62,15 @@ class DockerHelper {
         executeCmd(project, cmd)
     }
 
+    static void removeDockerImage(project, tag) {
+        def dockerRepository = project.docker.dockerRepository ?: ''
+        if (!dockerRepository.empty && !dockerRepository.endsWith('/')) dockerRepository = dockerRepository + '/'
+        def imageName = project.docker.imageName ?: project.getName()
+        def cmd = "docker rmi ${dockerRepository}${imageName}:${tag}"
+
+        executeCmd(project, cmd)
+    }
+
     static List<String> dockerBuildParameter(project) {
         List<String> arguments = new ArrayList<>()
 
