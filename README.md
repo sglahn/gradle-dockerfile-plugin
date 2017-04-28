@@ -40,7 +40,7 @@ The `dockerPush` task will push the Docker image to a Docker repository.
 If authentication is required use [docker login](https://docs.docker.com/engine/reference/commandline/login/) to
 add the credential to your `$HOME/.docker/config.json` file. [This](https://hub.docker.com/r/sglahn/gradle-dockerfile-plugin-example-project/) 
 is how it looks like when the example project is pushed to DockerHub. When the property "removeImagesAfterPush" is set to `true`, 
-the image will be removed from the local registry after the push to the remote registry. This is useful e.g. for builds 
+the image will be removed from the local repository after the push to a remote repository. This is useful e.g. for builds 
 on CI agents. 
 ### Configuration
 The following configuration can be added to your Gradle build file:
@@ -70,7 +70,7 @@ docker {
     pull = true
     // Suppress the build output and print image ID on success. Optional, default = true
     quiet = false
-    // Remove image on local registry after push to remote registry, useful for builds on CI agents. Optional, default = false
+    // Remove image in local repository after push to a remote repository, useful for builds on CI agents. Optional, default = false
     removeImagesAfterPush = true
 }
 ```
