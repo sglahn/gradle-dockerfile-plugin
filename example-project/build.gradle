@@ -1,16 +1,16 @@
 buildscript {
     repositories { mavenCentral() }
-    dependencies { classpath('org.sglahn:gradle-dockerfile-plugin:0.3') }
+    dependencies { classpath('org.sglahn:gradle-dockerfile-plugin:0.4') }
 }
 apply plugin: 'dockerfile'
 
 // or via plugin mechanism:
 //plugins {
-//    id "org.sglahn.gradle-dockerfile-plugin" version "0.3"
+//    id "org.sglahn.gradle-dockerfile-plugin" version "0.4"
 //}
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.4.1'
+    gradleVersion = '3.5'
 }
 
 apply plugin: 'java'
@@ -52,6 +52,8 @@ docker {
     pull = true
     // Suppress the build output and print image ID on success. Optional, default = true
     quiet = false
+    // Remove image on local registry after push to remote registry, useful for builds on CI agents. Optional, default = false
+    removeImagesAfterPush = true
 }
 dockerBuild.dependsOn(build)
 dockerPush.dependsOn(dockerBuild)
