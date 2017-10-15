@@ -52,7 +52,9 @@ docker {
     imageName = name
     // Docker repository. Optional, default == no repository
     dockerRepository = 'sglahn'
-    // Path to the Dockerfile to use. Optional, default = ${projectDir}/Dockerfile
+    // Path or URL referring to the build context. Optional, default = ${project.projectDir.getAbsolutePath()}
+    buildContext = 'build-context'
+    // Path to the Dockerfile to use (relative to ${project.projectDir}). Optional, default = ${buildContext}/Dockerfile
     dockerFile = 'src/main/docker/Dockerfile'
     // Add a list of tags for an image. Optional, default = 'latest'
     tags = [version, 'latest', 'Hello']

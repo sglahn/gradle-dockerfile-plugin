@@ -34,6 +34,25 @@ class DockerHelperSpec extends Specification{
         dockerfile == (new File(project.projectDir, "src/main/docker/Dockerfile"))
     }
 
+    def "Default build context is returned"() {
+        given:
+        Project project = ProjectBuilder.builder().build()
+        project.apply plugin: pluginName
+
+        expect:
+        DockerHelper.buildContext(project) == project.projectDir
+    }
+
+    def "Specified build context is returned"() {
+        given:
+        Project project = ProjectBuilder.builder().build()
+        project.apply plugin: pluginName
+        project.getExtensions().docker.buildContext = "build-context"
+
+        expect:
+        DockerHelper.buildContext(project) == new File(project.projectDir, "build-context")
+    }
+
     def "Default tag is applied if no tag specified"() {
         given:
         Project project = ProjectBuilder.builder().build()
@@ -112,7 +131,32 @@ class DockerHelperSpec extends Specification{
         arguments.join(" ").contains("--force-rm=true")
     }
 
-    def "Default Dockerfile is correct"() {
+    def "Default build context is the project directory"() {
+        given:
+        Project project = ProjectBuilder.builder().build()
+        project.apply plugin: pluginName
+
+        when:
+        def arguments = DockerHelper.dockerBuildParameter(project)
+
+        then:
+        arguments.join(" ").endsWith(project.projectDir.getAbsolutePath())
+    }
+
+    def "Specified build context is applied"() {
+        given:
+        Project project = ProjectBuilder.builder().build()
+        project.apply plugin: pluginName
+        project.getExtensions().docker.buildContext = "build-context"
+
+        when:
+        def arguments = DockerHelper.dockerBuildParameter(project)
+
+        then:
+        arguments.join(" ").endsWith(" ${project.projectDir.absolutePath}/build-context")
+    }
+
+    def "Default Dockerfile is correct (default build context)"() {
         given:
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: pluginName
@@ -124,10 +168,24 @@ class DockerHelperSpec extends Specification{
         arguments.join(" ").contains("-f ${project.projectDir.absolutePath}/Dockerfile")
     }
 
+    def "Default Dockerfile is correct (specified build context)"() {
+        given:
+        Project project = ProjectBuilder.builder().build()
+        project.apply plugin: pluginName
+        project.getExtensions().docker.buildContext = "build-context/"
+
+        when:
+        def arguments = DockerHelper.dockerBuildParameter(project)
+
+        then:
+        arguments.join(" ").contains("-f ${project.projectDir.absolutePath}/build-context/Dockerfile")
+    }
+
     def "Specified Dockerfile is applied"() {
         given:
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: pluginName
+        project.getExtensions().docker.buildContext = "does/not/matter"
         project.getExtensions().docker.dockerFile = "src/main/docker/Dockerfile"
 
         when:
