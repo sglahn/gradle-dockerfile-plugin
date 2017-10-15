@@ -59,4 +59,3 @@ docker {
 }
 dockerBuild.dependsOn(build)
 dockerPush.dependsOn(dockerBuild)
-
