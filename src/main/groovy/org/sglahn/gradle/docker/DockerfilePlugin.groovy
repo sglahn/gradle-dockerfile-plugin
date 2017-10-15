@@ -15,8 +15,8 @@
  */
 package org.sglahn.gradle.docker
 
-import org.gradle.api.Project
 import org.gradle.api.Plugin
+import org.gradle.api.Project
 import org.sglahn.gradle.docker.tasks.DockerBuildTask
 import org.sglahn.gradle.docker.tasks.DockerPushTask
 
@@ -30,4 +30,3 @@ class DockerfilePlugin implements Plugin<Project> {
         project.getTasks().create('dockerPush', DockerPushTask)
     }
 }
-

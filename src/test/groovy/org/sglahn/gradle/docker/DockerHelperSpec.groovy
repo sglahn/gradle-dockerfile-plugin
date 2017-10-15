@@ -5,7 +5,7 @@ import org.gradle.testfixtures.ProjectBuilder
 import org.sglahn.gradle.docker.util.DockerHelper
 import spock.lang.Specification
 
-class DockerHelperSpec extends Specification{
+class DockerHelperSpec extends Specification {
 
     def pluginName = 'dockerfile'
 
@@ -162,7 +162,7 @@ class DockerHelperSpec extends Specification{
         arguments.join(" ").endsWith(" ./build-context")
     }
 
-    def "Default container isolation is default "() {
+    def "Default container isolation is default"() {
         given:
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: pluginName
