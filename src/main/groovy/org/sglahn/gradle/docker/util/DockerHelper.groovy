@@ -111,7 +111,7 @@ class DockerHelper {
 
         arguments.add('-f')
         arguments.add(dockerFile(project).getAbsolutePath())
-        arguments.add(project.projectDir.getAbsolutePath())
+        arguments.add(project.docker.buildContext)
 
         arguments
     }

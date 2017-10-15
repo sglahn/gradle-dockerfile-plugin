@@ -15,6 +15,8 @@
  */
 package org.sglahn.gradle.docker
 
+import org.gradle.api.Project
+
 class DockerFilePluginExtension {
     String imageVersion
 
@@ -27,10 +29,15 @@ class DockerFilePluginExtension {
     String[] buildArgs
 
     String dockerFile
+    String buildContext
 
     boolean removeIntermediateContainers = false
     boolean noCache = false
     boolean pull = false
     boolean quiet = true
     boolean removeImagesAfterPush = false
+
+    DockerFilePluginExtension(Project project) {
+        buildContext = project.projectDir.getAbsolutePath()
+    }
 }

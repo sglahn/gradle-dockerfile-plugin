@@ -54,6 +54,8 @@ docker {
     dockerRepository = 'sglahn'
     // Path to the Dockerfile to use. Optional, default = ${projectDir}/Dockerfile
     dockerFile = 'src/main/docker/Dockerfile'
+    // Path or URL referring to the build context, default = ${project.projectDir.getAbsolutePath()}
+    buildContext = 'build-context'
     // Add a list of tags for an image. Optional, default = 'latest'
     tags = [version, 'latest', 'Hello']
     // Set metadata for an image. Optional, default = no label applied

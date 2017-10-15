@@ -24,7 +24,7 @@ class DockerfilePlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        project.getExtensions().create('docker', DockerFilePluginExtension)
+        project.getExtensions().create('docker', DockerFilePluginExtension, project)
 
         project.getTasks().create('dockerBuild', DockerBuildTask)
         project.getTasks().create('dockerPush', DockerPushTask)

@@ -137,6 +137,31 @@ class DockerHelperSpec extends Specification{
         arguments.join(" ").contains("-f ${project.projectDir.absolutePath}/src/main/docker/Dockerfile")
     }
 
+    def "Default build context is the project directory"() {
+        given:
+        Project project = ProjectBuilder.builder().build()
+        project.apply plugin: pluginName
+
+        when:
+        def arguments = DockerHelper.dockerBuildParameter(project)
+
+        then:
+        arguments.join(" ").endsWith(project.projectDir.getAbsolutePath())
+    }
+
+    def "Specified build context is applied"() {
+        given:
+        Project project = ProjectBuilder.builder().build()
+        project.apply plugin: pluginName
+        project.getExtensions().docker.buildContext = "./build-context"
+
+        when:
+        def arguments = DockerHelper.dockerBuildParameter(project)
+
+        then:
+        arguments.join(" ").endsWith(" ./build-context")
+    }
+
     def "Default container isolation is default "() {
         given:
         Project project = ProjectBuilder.builder().build()
