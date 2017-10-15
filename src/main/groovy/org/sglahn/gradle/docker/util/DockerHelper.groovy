@@ -22,9 +22,16 @@ class DockerHelper {
     static File dockerFile(project) {
         if(project.extensions.docker.dockerFile) {
             new File(project.projectDir, project.extensions.docker.dockerFile)
+        } else {
+            new File(buildContext(project), 'Dockerfile')
         }
-        else {
-            new File(project.projectDir, 'Dockerfile')
+    }
+
+    static File buildContext(project) {
+        if (project.extensions.docker.buildContext) {
+            new File(project.projectDir, project.extensions.docker.buildContext)
+        } else {
+            project.projectDir
         }
     }
 
