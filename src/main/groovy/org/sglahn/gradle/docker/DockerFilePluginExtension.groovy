@@ -27,6 +27,7 @@ class DockerFilePluginExtension {
     String[] buildArgs
 
     String dockerFile
+    String buildContext
 
     boolean removeIntermediateContainers = false
     boolean noCache = false
