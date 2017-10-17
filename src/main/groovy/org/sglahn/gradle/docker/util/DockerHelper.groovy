@@ -42,6 +42,13 @@ class DockerHelper {
         }
     }
 
+    static void checkIfBuildContextExists(project) {
+        def buildContext = buildContext(project)
+        if (!buildContext.exists()) {
+            throw new GradleException("Build context ${buildContext.getAbsolutePath()} does not exist.")
+        }
+    }
+
     static void executeCmd(project, cmd) {
         project.getLogger().info("Executing: ${cmd}")
         def stdout = new StringBuffer()

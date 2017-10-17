@@ -56,4 +56,25 @@ class DockerfilePluginSpec extends Specification {
         GradleException exception = thrown()
         exception.getCause().getLocalizedMessage().contains("Dockerfile not found in ")
     }
+
+    def "Plugin task fails with Exception if build context not found"() {
+        given: 'a project with a not existing build context'
+        Project project = ProjectBuilder.builder().build()
+        project.apply plugin: 'dockerfile'
+        project.getExtensions().docker.buildContext = "src/foo"
+        project.getExtensions().docker.dockerFile = 'Dockerfile'
+        project.evaluate()
+
+        and: 'an existing Dockerfile to pass the preceding Dockerfile check'
+        File existingDockerfile = project.file('Dockerfile')
+        existingDockerfile.createNewFile()
+
+        when:
+        project.tasks['dockerBuild'].execute()
+
+        then:
+        GradleException exception = thrown()
+        exception.getCause().getLocalizedMessage().contains("Build context ")
+        exception.getCause().getLocalizedMessage().contains(" does not exist.")
+    }
 }
