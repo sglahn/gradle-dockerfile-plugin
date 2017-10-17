@@ -35,12 +35,11 @@ class DockerHelper {
         }
     }
 
-    static Boolean checkIfDockerfileExists(project) {
-        def dockerFile = DockerHelper.dockerFile(project)
+    static void checkIfDockerfileExists(project) {
+        def dockerFile = dockerFile(project)
         if (!dockerFile.exists()) {
             throw new GradleException("Dockerfile not found in ${dockerFile.getAbsolutePath()}.")
         }
-        true
     }
 
     static void executeCmd(project, cmd) {
