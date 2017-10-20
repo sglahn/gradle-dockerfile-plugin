@@ -1,7 +1,7 @@
 apply plugin: 'groovy'
 
 group = 'org.sglahn'
-version = "0.4"
+version = "0.5"
 
 buildscript {
     repositories {
