@@ -22,18 +22,31 @@ class DockerHelper {
     static File dockerFile(project) {
         if(project.extensions.docker.dockerFile) {
             new File(project.projectDir, project.extensions.docker.dockerFile)
-        }
-        else {
-            new File(project.projectDir, 'Dockerfile')
+        } else {
+            new File(buildContext(project), 'Dockerfile')
         }
     }
 
-    static Boolean checkIfDockerfileExists(project) {
-        def dockerFile = DockerHelper.dockerFile(project)
+    static File buildContext(project) {
+        if (project.extensions.docker.buildContext) {
+            new File(project.projectDir, project.extensions.docker.buildContext)
+        } else {
+            project.projectDir
+        }
+    }
+
+    static void checkIfDockerfileExists(project) {
+        def dockerFile = dockerFile(project)
         if (!dockerFile.exists()) {
             throw new GradleException("Dockerfile not found in ${dockerFile.getAbsolutePath()}.")
         }
-        true
+    }
+
+    static void checkIfBuildContextExists(project) {
+        def buildContext = buildContext(project)
+        if (!buildContext.exists()) {
+            throw new GradleException("Build context ${buildContext.getAbsolutePath()} does not exist.")
+        }
     }
 
     static void executeCmd(project, cmd) {
@@ -111,7 +124,7 @@ class DockerHelper {
 
         arguments.add('-f')
         arguments.add(dockerFile(project).getAbsolutePath())
-        arguments.add(project.projectDir.getAbsolutePath())
+        arguments.add(buildContext(project).getAbsolutePath())
 
         arguments
     }

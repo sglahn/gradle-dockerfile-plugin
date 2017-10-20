@@ -27,6 +27,7 @@ class DockerBuildTask extends Exec {
         project.afterEvaluate {
             doFirst {
                 DockerHelper.checkIfDockerfileExists(project)
+                DockerHelper.checkIfBuildContextExists(project)
             }
 
             this.setExecutable("docker")
