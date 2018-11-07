@@ -1,6 +1,6 @@
 buildscript {
     repositories { mavenCentral() }
-    dependencies { classpath('org.sglahn:gradle-dockerfile-plugin:0.4') }
+    dependencies { classpath('org.sglahn:gradle-dockerfile-plugin:0.6') }
 }
 apply plugin: 'dockerfile'
 
@@ -8,10 +8,6 @@ apply plugin: 'dockerfile'
 //plugins {
 //    id "org.sglahn.gradle-dockerfile-plugin" version "0.4"
 //}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
-}
 
 apply plugin: 'java'
 

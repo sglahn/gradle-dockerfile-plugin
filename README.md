@@ -46,7 +46,7 @@ on CI agents.
 The following configuration can be added to your Gradle build file:
 ```gradle
 docker {
-    // Image version. Optional, default = project.version
+    // Image version. Optional, default = latest
     imageVersion = version
     // Image name. Optional, default = project.name
     imageName = name
@@ -56,7 +56,7 @@ docker {
     buildContext = 'build-context'
     // Path to the Dockerfile to use (relative to ${project.projectDir}). Optional, default = ${buildContext}/Dockerfile
     dockerFile = 'src/main/docker/Dockerfile'
-    // Add a list of tags for an image. Optional, default = 'latest'
+    // Add a list of tags for an image. Optional, default = $imageVersion
     tags = [version, 'latest', 'Hello']
     // Set metadata for an image. Optional, default = no label applied
     labels = ['branch=master', 'mylabel=test']
