@@ -1,5 +1,5 @@
 /**
- Copyright 2017 Sebastian Glahn
+ Copyright 2017-2018 Sebastian Glahn
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -26,10 +26,15 @@ class DockerPushTask extends DefaultTask {
 
     @TaskAction
     def action() {
-        project.getExtensions().docker.tags.each {
-            DockerHelper.dockerPush(project, it)
-            if (project.docker.removeImagesAfterPush) {
-                DockerHelper.removeDockerImage(project, it)
+        if (project.getExtensions().docker.tags == null) {
+            project.getExtensions().docker.tags = [ project.docker.imageVersion ] ?: [ 'latest' ]
+        }
+        else {
+            project.getExtensions().docker.tags.each {
+                DockerHelper.dockerPush(project, it)
+                if (project.docker.removeImagesAfterPush) {
+                    DockerHelper.removeDockerImage(project, it)
+                }
             }
         }
     }

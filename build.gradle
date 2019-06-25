@@ -1,7 +1,7 @@
 apply plugin: 'groovy'
 
 group = 'org.sglahn'
-version = "0.5"
+version = "0.6"
 
 buildscript {
     repositories {
@@ -10,7 +10,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+        classpath "com.gradle.publish:plugin-publish-plugin:0.10.0"
     }
 }
 
@@ -34,13 +34,9 @@ repositories {
     mavenCentral()
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.5.0'
-}
-
 dependencies {
     compile gradleApi()
-    compile 'org.codehaus.groovy:groovy-all:2.4.10'
+    compile 'org.codehaus.groovy:groovy-all:2.4.15'
 
     testCompile gradleTestKit()
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
