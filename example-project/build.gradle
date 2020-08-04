@@ -11,7 +11,7 @@ apply plugin: 'dockerfile'
 
 apply plugin: 'java'
 
-version = "1.0.0"
+version = "2.0.0"
 
 repositories {
     jcenter()
@@ -27,7 +27,7 @@ docker {
     // Image version. Optional, default = project.version
     imageVersion = version
     // Image name. Optional, default = project.name
-    imageName = name
+    imageName = 'test-project'
     // Docker repository. Optional, default == no repository
     dockerRepository = 'sglahn'
     // Path or URL referring to the build context. Optional, default = ${project.projectDir.getAbsolutePath()}

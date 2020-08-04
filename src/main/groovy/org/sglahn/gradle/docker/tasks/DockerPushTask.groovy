@@ -21,8 +21,10 @@ import org.sglahn.gradle.docker.util.DockerHelper
 
 class DockerPushTask extends DefaultTask {
 
-//    String group = 'Docker'
-//    String description = 'Pushes a docker image to a repository.'
+    DockerPushTask() {
+        group = 'Docker'
+        description = 'Pushes a docker image to a repository.'
+    }
 
     @TaskAction
     def action() {
