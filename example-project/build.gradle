@@ -1,6 +1,6 @@
 buildscript {
     repositories { mavenCentral() }
-    dependencies { classpath('org.sglahn:gradle-dockerfile-plugin:0.6') }
+    dependencies { classpath files('../build/libs/gradle-dockerfile-plugin-0.6.jar') }
 }
 apply plugin: 'dockerfile'
 
@@ -18,9 +18,9 @@ repositories {
 }
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.21'
+    implementation 'org.slf4j:slf4j-api:1.7.21'
 
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 }
 
 docker {

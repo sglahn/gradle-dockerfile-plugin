@@ -20,10 +20,10 @@ import org.sglahn.gradle.docker.util.DockerHelper
 
 class DockerBuildTask extends Exec {
 
-    String group = 'Docker'
-    String description = 'Builds a new image with a Dockerfile.'
 
     DockerBuildTask() {
+        group = 'Docker'
+        description = 'Builds a new image with a Dockerfile.'
         project.afterEvaluate {
             doFirst {
                 DockerHelper.checkIfDockerfileExists(project)

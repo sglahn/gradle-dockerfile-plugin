@@ -1,8 +1,3 @@
-apply plugin: 'groovy'
-
-group = 'org.sglahn'
-version = "0.6"
-
 buildscript {
     repositories {
         maven {
@@ -14,7 +9,14 @@ buildscript {
     }
 }
 
-apply plugin: "com.gradle.plugin-publish"
+plugins {
+    id 'groovy'
+    id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '0.10.1'
+}
+
+group = 'org.sglahn'
+version = "0.6"
 
 pluginBundle {
     website = 'https://github.com/sglahn/gradle-dockerfile-plugin'
@@ -35,88 +37,9 @@ repositories {
 }
 
 dependencies {
-    compile gradleApi()
-    compile 'org.codehaus.groovy:groovy-all:2.4.15'
+    implementation gradleApi()
+    implementation 'org.codehaus.groovy:groovy-all:2.5.11'
 
-    testCompile gradleTestKit()
-    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
-}
-
-task sourcesJar(type: Jar) {
-    classifier 'sources'
-    from sourceSets.main.allSource
-}
-
-task groovydocJar(type: Jar, dependsOn: groovydoc) {
-    classifier 'groovydoc'
-    from groovydoc.destinationDir
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives groovydocJar
-    archives javadocJar
-}
-
-apply plugin: 'maven'
-
-install {
-    repositories.mavenInstaller {
-        pom.version = project.version
-        pom.groupId = group
-        pom.artifactId = rootProject.name
-        pom.packaging = 'jar'
-    }
-}
-install.dependsOn('build')
-
-apply plugin: 'signing'
-
-signing {
-    sign configurations.archives
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
-
-            pom.project {
-                name rootProject.name
-                packaging 'jar'
-                description = 'Gradle Plugin to build and push Docker images without inline configuration.'
-                url 'https://github.com/sglahn/gradle-dockerfile-plugin'
-
-                scm {
-                    url 'scm:git@github.com:sglahn/gradle-dockerfile-plugin.git'
-                    connection 'scm:git@github.com:sglahn/gradle-dockerfile-plugin.git'
-                    developerConnection 'scm:git@github.com:sglahn/gradle-dockerfile-plugin.git'
-                }
-
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'sglahn'
-                        name 'Sebastian Glahn'
-                    }
-                }
-            }
-        }
-    }
+    testImplementation gradleTestKit()
+    testImplementation 'org.spockframework:spock-core:1.0-groovy-2.4'
 }
