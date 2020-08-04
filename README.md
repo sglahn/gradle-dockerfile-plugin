@@ -30,7 +30,7 @@ dockerPush - Pushes a docker image to a repository.
 ### The dockerBuild task
 The `dockerBuild` task will build a new Docker image. The default settings are:
 
- - dockerfile: `${projectDir}/Dockerfile`.
+ - dockerFile: `${projectDir}/Dockerfile`.
  - imageName: `project.name`
  - tags: `project.version` and `latest`.
 
