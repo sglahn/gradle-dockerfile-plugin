@@ -15,12 +15,26 @@
  */
 package org.sglahn.gradle.docker
 
-import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.gradle.testkit.runner.UnexpectedBuildFailure
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+import org.gradle.testkit.runner.GradleRunner
 
 class DockerfilePluginSpec extends Specification {
+    @Rule TemporaryFolder testProjectDir = new TemporaryFolder()
+    File buildFile
+
+    def setup() {
+        buildFile = testProjectDir.newFile('build.gradle')
+        buildFile << """
+            plugins {
+                id 'dockerfile'
+            }
+        """
+    }
 
     def "Plugin can be applied"() {
         given:
@@ -43,53 +57,61 @@ class DockerfilePluginSpec extends Specification {
         project.tasks['dockerBuild'].description != ""
     }
 
-    def "Plugin task fails with Exception if Dockerfile not found"() {
-        given:
-        Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
-        project.getExtensions().docker.dockerFile = "src/foo/Dockerfile"
-        project.evaluate()
-
+    def "Plugin task fails with Exception if default Dockerfile not found"() {
         when:
-        project.tasks['dockerBuild'].execute()
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments('dockerBuild')
+                .withPluginClasspath()
+                .build()
 
         then:
-        GradleException exception = thrown()
-        exception.getCause().getLocalizedMessage().contains("Dockerfile not found in ")
+        UnexpectedBuildFailure exception = thrown()
+        exception.message.contains("Dockerfile not found in ")
     }
 
-    def "Plugin task fails with Exception if default Dockerfile not found"() {
+    def "Plugin task fails with Exception if Dockerfile not found"() {
         given:
-        Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
-        project.evaluate()
+        buildFile << """
+            docker {
+                dockerFile = 'src/foo/Dockerfile'
+            }
+        """
 
         when:
-        project.tasks['dockerBuild'].execute()
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments('dockerBuild')
+                .withPluginClasspath()
+                .build()
 
         then:
-        GradleException exception = thrown()
-        exception.getCause().getLocalizedMessage().contains("Dockerfile not found in ")
+        UnexpectedBuildFailure exception = thrown()
+        exception.message.contains("Dockerfile not found in ")
     }
 
     def "Plugin task fails with Exception if build context not found"() {
         given: 'a project with a not existing build context'
-        Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'dockerfile'
-        project.getExtensions().docker.buildContext = "src/foo"
-        project.getExtensions().docker.dockerFile = 'Dockerfile'
-        project.evaluate()
+        buildFile << """
+            docker {
+                dockerFile = 'Dockerfile'
+                buildContext = 'src/foo'
+            }
+        """
 
         and: 'an existing Dockerfile to pass the preceding Dockerfile check'
-        File existingDockerfile = project.file('Dockerfile')
-        existingDockerfile.createNewFile()
+        testProjectDir.newFile('Dockerfile')
 
         when:
-        project.tasks['dockerBuild'].execute()
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments('dockerBuild')
+                .withPluginClasspath()
+                .build()
 
         then:
-        GradleException exception = thrown()
-        exception.getCause().getLocalizedMessage().contains("Build context ")
-        exception.getCause().getLocalizedMessage().contains(" does not exist.")
+        UnexpectedBuildFailure exception = thrown()
+        exception.message.contains("Build context ")
+        exception.message.contains(" does not exist.")
     }
 }

@@ -2,21 +2,21 @@
 Gradle plugin to build and push Docker images using an external Dockerfile and without the need of inline configuration. This means you can use a normal Dockerfile and put it in your project.
 The plugin is available through [Maven Central](https://search.maven.org/#search%7Cga%7C1%7Cgradle-dockerfile-plugin) and the [Gradle Plugin Portal](https://plugins.gradle.org).
 
-[![CircleCI](https://circleci.com/gh/sglahn/gradle-dockerfile-plugin/tree/master.svg?style=svg)](https://circleci.com/gh/sglahn/gradle-dockerfile-plugin/tree/master)
+![Build State](https://github.com/sglahn/gradle-dockerfile-plugin/workflows/Build%20and%20Test/badge.svg)
 
 ### Installation
 To use the plugin add a build script dependency to your Gradle build file:
 ```gradle
 buildscript {
     repositories { mavenCentral() }
-    dependencies { classpath('org.sglahn:gradle-dockerfile-plugin:0.4') }
+    dependencies { classpath('org.sglahn:gradle-dockerfile-plugin:0.6') }
 }
 apply plugin: 'dockerfile'
 ```
 or via the new plugin mechanism introduced in Gradle 2.1:
 ```
 plugins {
-  id "org.sglahn.gradle-dockerfile-plugin" version "0.4"
+  id "org.sglahn.gradle-dockerfile-plugin" version "0.6"
 }
 ```
 The plugin will add the following tasks to your project:
