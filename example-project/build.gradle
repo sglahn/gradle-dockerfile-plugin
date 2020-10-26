@@ -1,6 +1,6 @@
 buildscript {
     repositories { mavenCentral() }
-    dependencies { classpath files('../build/libs/gradle-dockerfile-plugin-0.6.jar') }
+    dependencies { classpath files('../build/libs/gradle-dockerfile-plugin-0.6.1.jar') }
 }
 apply plugin: 'dockerfile'
 
@@ -10,6 +10,11 @@ apply plugin: 'dockerfile'
 //}
 
 apply plugin: 'java'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_9
+    targetCompatibility = JavaVersion.VERSION_1_9
+}
 
 version = "2.0.0"
 
