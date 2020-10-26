@@ -10,13 +10,13 @@ Use the plugin via the Gradle [plugins DSL](https://docs.gradle.org/current/user
 Groovy:
 ```Groovy
 plugins {
-  id "org.sglahn.gradle-dockerfile-plugin" version "0.6"
+  id "org.sglahn.gradle-dockerfile-plugin" version "0.7"
 }
 ```
 Kotlin:
 ```Kotlin
 plugins {
-  id("org.sglahn.gradle-dockerfile-plugin") version "0.6"
+  id("org.sglahn.gradle-dockerfile-plugin") version "0.7"
 }
 ```
 The plugin will add the following tasks to your project:
