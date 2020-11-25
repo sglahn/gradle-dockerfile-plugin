@@ -31,12 +31,10 @@ class DockerPushTask extends DefaultTask {
         if (project.getExtensions().docker.tags == null) {
             project.getExtensions().docker.tags = [ project.docker.imageVersion ] ?: [ 'latest' ]
         }
-        else {
-            project.getExtensions().docker.tags.each {
-                DockerHelper.dockerPush(project, it)
-                if (project.docker.removeImagesAfterPush) {
-                    DockerHelper.removeDockerImage(project, it)
-                }
+        project.getExtensions().docker.tags.each {
+            DockerHelper.dockerPush(project, it)
+            if (project.docker.removeImagesAfterPush) {
+                DockerHelper.removeDockerImage(project, it)
             }
         }
     }
