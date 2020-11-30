@@ -22,9 +22,9 @@ class DockerFilePluginExtension {
     String imageName
     String isolation
 
-    String[] tags
-    String[] labels
-    String[] buildArgs
+    List<String> tags = []
+    List<String> labels = []
+    List<String> buildArgs = []
 
     String dockerFile
     String buildContext

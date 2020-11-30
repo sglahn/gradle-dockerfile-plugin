@@ -93,13 +93,15 @@ class DockerHelper {
         def imageVersion = project.docker.imageVersion ?: "latest"
 
         arguments.add('build')
-        if (project.docker.tags == null) {
+
+        if (project.docker.tags.isEmpty()) {
             arguments.add('-t')
             arguments.add("${dockerRepository}${imageName}:${imageVersion}")
-        }
-        project.docker.tags.each {
-            arguments.add('-t')
-            arguments.add("${dockerRepository}${imageName}:${it}")
+        } else {
+            project.docker.tags.each {
+                arguments.add('-t')
+                arguments.add("${dockerRepository}${imageName}:${it}")
+            }
         }
 
         project.docker.labels.each {

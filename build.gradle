@@ -13,6 +13,7 @@ plugins {
     id 'groovy'
     id 'java-gradle-plugin'
     id 'com.gradle.plugin-publish' version '0.12.0'
+    id 'maven-publish'
 }
 
 java {
@@ -21,7 +22,7 @@ java {
 }
 
 group = 'org.sglahn'
-version = "0.7"
+version = "0.8"
 
 pluginBundle {
     website = 'https://github.com/sglahn/gradle-dockerfile-plugin'
@@ -36,7 +37,6 @@ pluginBundle {
         }
     }
 }
-
 repositories {
     mavenCentral()
 }

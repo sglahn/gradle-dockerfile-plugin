@@ -84,7 +84,7 @@ class DockerHelperSpec extends Specification {
         given:
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: pluginName
-        project.getExtensions().docker.tags = ["1.0", "version"]
+        project.getExtensions().docker.tags = ["1.0", "version"] as List
 
         when:
         def arguments = DockerHelper.dockerBuildParameter(project)

@@ -1,22 +1,14 @@
-buildscript {
-    repositories { mavenCentral() }
-    dependencies { classpath files('../build/libs/gradle-dockerfile-plugin-0.7.jar') }
+plugins {
+    id 'java'
+    id 'org.sglahn.gradle-dockerfile-plugin' version '0.8'
 }
-apply plugin: 'dockerfile'
-
-// or via plugin mechanism:
-//plugins {
-//    id "org.sglahn.gradle-dockerfile-plugin" version "0.7"
-//}
-
-apply plugin: 'java'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_9
     targetCompatibility = JavaVersion.VERSION_1_9
 }
 
-version = "2.0.0"
+version = '1.0.0'
 
 repositories {
     jcenter()
@@ -58,5 +50,6 @@ docker {
     // Remove image on local registry after push to remote registry, useful for builds on CI agents. Optional, default = false
     removeImagesAfterPush = true
 }
+
 dockerBuild.dependsOn(build)
 dockerPush.dependsOn(dockerBuild)
