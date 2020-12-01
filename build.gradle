@@ -16,6 +16,10 @@ plugins {
     id 'maven-publish'
 }
 
+repositories {
+    mavenCentral()
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -37,8 +41,14 @@ pluginBundle {
         }
     }
 }
-repositories {
-    mavenCentral()
+
+gradlePlugin {
+    plugins {
+        DockerfilePlugin {
+            id = 'org.sglahn.gradle-dockerfile-plugin'
+            implementationClass = 'org.sglahn.gradle.docker.DockerfilePlugin'
+        }
+    }
 }
 
 dependencies {
