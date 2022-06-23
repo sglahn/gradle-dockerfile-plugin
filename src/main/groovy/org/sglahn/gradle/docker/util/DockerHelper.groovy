@@ -70,7 +70,12 @@ class DockerHelper {
         def dockerRepository = project.docker.dockerRepository ?: ''
         if (!dockerRepository.empty && !dockerRepository.endsWith('/')) dockerRepository = dockerRepository + '/'
         def imageName = project.docker.imageName ?: project.getName()
-        def cmd = "docker push ${dockerRepository}${imageName}:${tag}"
+        def cmd = ""
+        if (useBuildX(project)) {
+            cmd = "docker " + dockerBuildParameter(project, true).join(" ")
+        } else {
+            cmd = "docker push ${dockerRepository}${imageName}:${tag}"
+        }
 
         executeCmd(project, cmd)
     }
@@ -84,7 +89,7 @@ class DockerHelper {
         executeCmd(project, cmd)
     }
 
-    static List<String> dockerBuildParameter(project) {
+    static List<String> dockerBuildParameter(project, push=false) {
         List<String> arguments = new ArrayList<>()
 
         def dockerRepository = project.docker.dockerRepository ?: ''
@@ -92,7 +97,15 @@ class DockerHelper {
         def imageName = project.docker.imageName ?: project.getName()
         def imageVersion = project.docker.imageVersion ?: "latest"
 
+        if (useBuildX(project)) {
+            arguments.add('buildx')
+        }
         arguments.add('build')
+
+        println("push: $push")
+        if (push) {
+            arguments.add("--push")
+        }
 
         if (project.docker.tags.isEmpty()) {
             arguments.add('-t')
@@ -112,6 +125,10 @@ class DockerHelper {
             arguments.add("--build-arg=${it}")
         }
 
+        if (useBuildX(project)) {
+            arguments.add("--platform=${project.docker.platforms.join(",")}")
+        }
+
         if (project.docker.isolation == null) {
             arguments.add("--isolation=default")
         }
@@ -129,5 +146,9 @@ class DockerHelper {
         arguments.add(buildContext(project).getAbsolutePath())
 
         arguments
+    }
+
+    static boolean useBuildX(project) {
+        return !project.docker.platforms.isEmpty()
     }
 }

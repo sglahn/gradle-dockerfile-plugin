@@ -70,6 +70,9 @@ docker {
     // name and value of a buildarg. Optional, default = no build arguments
     buildArgs = ['http_proxy="http://some.proxy.url"']
 
+    // platforms to be built, Optional, default = no. E.g. platforms = ['linux/arm64', 'linux/amd64']
+    platforms = ['linux/arm64', 'linux/amd64']
+    
     // Always remove intermediate containers, even after unsuccessful builds. Optional, default = false
     removeIntermediateContainers = true
 
