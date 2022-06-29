@@ -25,6 +25,7 @@ class DockerFilePluginExtension {
     List<String> tags = []
     List<String> labels = []
     List<String> buildArgs = []
+    List<String> platforms = []
 
     String dockerFile
     String buildContext

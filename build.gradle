@@ -26,7 +26,7 @@ java {
 }
 
 group = 'org.sglahn'
-version = "0.8"
+version = "0.8.1"
 
 pluginBundle {
     website = 'https://github.com/sglahn/gradle-dockerfile-plugin'
